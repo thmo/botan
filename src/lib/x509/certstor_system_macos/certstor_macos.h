@@ -38,14 +38,6 @@ class BOTAN_PUBLIC_API(2, 10) Certificate_Store_MacOS final : public Certificate
       std::vector<X509_DN> all_subjects() const override;
 
       /**
-      * Find a certificate by Subject DN and (optionally) key identifier
-      * @return the first certificate that matches
-      */
-      std::shared_ptr<const X509_Certificate> find_cert(
-         const X509_DN& subject_dn,
-         const std::vector<uint8_t>& key_id) const override;
-
-      /**
       * Find all certificates with a given Subject DN.
       * Subject DN and even the key identifier might not be unique.
       */

@@ -43,38 +43,6 @@ Certificate_Store_In_SQL::Certificate_Store_In_SQL(std::shared_ptr<SQL_Database>
    }
 
 // Certificate handling
-std::shared_ptr<const X509_Certificate>
-Certificate_Store_In_SQL::find_cert(const X509_DN& subject_dn, const std::vector<uint8_t>& key_id) const
-   {
-   std::shared_ptr<SQL_Database::Statement> stmt;
-
-   const std::vector<uint8_t> dn_encoding = subject_dn.BER_encode();
-
-   if(key_id.empty())
-      {
-      stmt = m_database->new_statement("SELECT certificate FROM " + m_prefix + "certificates WHERE subject_dn == ?1");
-      stmt->bind(1, dn_encoding);
-      }
-   else
-      {
-      stmt = m_database->new_statement("SELECT certificate FROM " + m_prefix + "certificates WHERE\
-                                        subject_dn == ?1 AND (key_id == NULL OR key_id == ?2)");
-      stmt->bind(1, dn_encoding);
-      stmt->bind(2,key_id);
-      }
-
-   std::shared_ptr<const X509_Certificate> cert;
-   while(stmt->step())
-      {
-      auto blob = stmt->get_blob(0);
-      cert = std::make_shared<X509_Certificate>(
-            std::vector<uint8_t>(blob.first,blob.first + blob.second));
-
-      }
-
-   return cert;
-   }
-
 std::vector<std::shared_ptr<const X509_Certificate>>
 Certificate_Store_In_SQL::find_all_certs(const X509_DN& subject_dn, const std::vector<uint8_t>& key_id) const
    {

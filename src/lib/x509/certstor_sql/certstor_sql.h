@@ -37,12 +37,6 @@ class BOTAN_PUBLIC_API(2,0) Certificate_Store_In_SQL : public Certificate_Store
                                         RandomNumberGenerator& rng,
                                         const std::string& table_prefix = "");
 
-      /**
-      * Returns the first certificate with matching subject DN and optional key ID.
-      */
-      std::shared_ptr<const X509_Certificate>
-         find_cert(const X509_DN& subject_dn, const std::vector<uint8_t>& key_id) const override;
-
       /*
       * Find all certificates with a given Subject DN.
       * Subject DN and even the key identifier might not be unique.
